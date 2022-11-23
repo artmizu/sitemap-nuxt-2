@@ -1,5 +1,6 @@
 <template>
   <div>
-    index page
+    /b/c
   </div>
 </template>
+
