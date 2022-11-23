@@ -2,9 +2,11 @@
   "name": "@artmizu/sitemap-nuxt-2",
   "type": "module",
   "version": "1.0.0",
-  "private": true,
   "packageManager": "pnpm@7.16.1",
   "author": "Aleksandr Saburov <hello@artmizu.ru> (http://artmizu.ru/)",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/module.d.ts",
