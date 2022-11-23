@@ -1,6 +1,7 @@
+import type { NuxtConfig } from '@nuxt/types'
 import MyModule from '../'
 
-export default {
+const config: NuxtConfig = {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -11,6 +12,22 @@ export default {
     MyModule,
   ],
 
+  sitemap: {
+    hostname: 'https://05.ru/',
+    request() {
+      return Promise.resolve([
+        {
+          url: 'https://05.ru/custom-1',
+          changefreq: 'daily',
+        },
+        {
+          url: 'https://05.ru/custom-2',
+          changefreq: 'hourly',
+        },
+      ])
+    },
+  },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
   ],
@@ -19,3 +36,5 @@ export default {
   build: {
   },
 }
+
+export default config
