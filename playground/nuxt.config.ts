@@ -1,5 +1,5 @@
 import type { NuxtConfig } from '@nuxt/types'
-import MyModule from '../'
+import MyModule from './../'
 
 const config: NuxtConfig = {
   // Auto import components: https://go.nuxtjs.dev/config-components
