@@ -4,14 +4,15 @@ import { tmpdir } from 'os'
 import consola from 'consola'
 import type { Module } from '@nuxt/types'
 import merge from 'lodash.merge'
+import type { PartialDeep } from 'type-fest'
 import getSitemapMiddleware from './middleware'
 import { getStaticRoutes } from './utils/static-routes'
-import type { DeepPartial, SitemapModuleParams, SitemapRoute, VueRouterRoute } from './type'
+import type { SitemapModuleParams, SitemapRoute, VueRouterRoute } from './type'
 import { assertField } from './utils/assert-field'
 
 declare module '@nuxt/types/config/index' {
   interface NuxtOptions {
-    sitemap?: DeepPartial<SitemapModuleParams>
+    sitemap?: PartialDeep<SitemapModuleParams>
   }
 }
 
