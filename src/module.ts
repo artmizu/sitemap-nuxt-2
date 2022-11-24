@@ -6,13 +6,20 @@ import type { Module } from '@nuxt/types'
 import merge from 'lodash.merge'
 import getSitemapMiddleware from './middleware'
 import { getStaticRoutes } from './utils/static-routes'
-import type { SitemapModuleParams, SitemapRoute, VueRouterRoute } from './type'
+import type { DeepPartial, SitemapModuleParams, SitemapRoute, VueRouterRoute } from './type'
+import { assertField } from './utils/assert-field'
+
+declare module '@nuxt/types/config/index' {
+  interface NuxtOptions {
+    sitemap?: DeepPartial<SitemapModuleParams>
+  }
+}
 
 const SitemapModule: Module = function (moduleOptions: Partial<SitemapModuleParams>) {
   if (this.options.dev && process.env.NODE_ENV !== 'production')
     return consola.info('[sitemap] Generation disabled')
 
-  const option: SitemapModuleParams = merge(
+  const option = merge(
     {
       cacheTime: 1000 * 60 * 60 * 24,
       chunkSize: 50000,
@@ -35,31 +42,23 @@ const SitemapModule: Module = function (moduleOptions: Partial<SitemapModulePara
     moduleOptions,
   )
 
-  if (!option.hostname)
-    consola.error('[sitemap] please specify hostname')
+  if (assertField(option, 'hostname')) {
+    this.addServerMiddleware(getSitemapMiddleware(option))
 
-  this.addServerMiddleware(getSitemapMiddleware(option))
+    this.extendRoutes((routes: VueRouterRoute[]) => {
+      const staticSitemap = getStaticRoutes({
+        list: routes,
+        exclude: option.exclude,
+        defaults: option.defaults,
+      })
 
-  this.extendRoutes((routes: VueRouterRoute[]) => {
-    const staticSitemap = getStaticRoutes({
-      list: routes,
-      exclude: option.exclude,
-      defaults: option.defaults,
+      fs.promises.writeFile(option.staticSitemapPath, JSON.stringify(staticSitemap))
+      consola.success('[sitemap] File with static routes is generated')
     })
-
-    fs.promises.writeFile(option.staticSitemapPath, JSON.stringify(staticSitemap))
-    consola.success('[sitemap] File with static routes is generated')
-  })
-}
-
-export default SitemapModule
-
-declare module '@nuxt/types' {
-  interface NuxtConfig {
-    sitemap?: DeepPartial<SitemapModuleParams>
+  }
+  else {
+    consola.error('[sitemap] please specify hostname')
   }
 }
 
-type DeepPartial<T> = T extends object ? {
-  [P in keyof T]?: DeepPartial<T[P]>;
-} : T
+export default SitemapModule
