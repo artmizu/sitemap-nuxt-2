@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/artmizu/sitemap-nuxt-2/compare/v1.0.1...v1.0.2) (2022-11-24)
+
+
+### Bug Fixes
+
+* types ([14b0f3f](https://github.com/artmizu/sitemap-nuxt-2/commit/14b0f3f129cfa1bdf495f38ba67cabbf83e4ff9f))
+* types ([32aee37](https://github.com/artmizu/sitemap-nuxt-2/commit/32aee3721f9c8eb0d2ebca89647cc59f94fa44ef))
+
 ## [1.0.1](https://github.com/artmizu/sitemap-nuxt-2/compare/v1.0.0...v1.0.1) (2022-11-23)
 
 
