@@ -1,7 +1,7 @@
 {
   "name": "@artmizu/sitemap-nuxt-2",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "packageManager": "pnpm@7.16.1",
   "author": "Aleksandr Saburov <hello@artmizu.ru> (http://artmizu.ru/)",
   "publishConfig": {
