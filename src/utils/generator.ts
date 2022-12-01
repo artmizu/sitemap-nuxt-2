@@ -1,6 +1,7 @@
 import { Readable } from 'stream'
-import fs from 'fs'
-import { simpleSitemapAndIndex } from 'sitemap'
+import fs, { createWriteStream } from 'fs'
+import { resolve } from 'path'
+import { SitemapAndIndexStream, SitemapStream } from 'sitemap'
 import type { SitemapModuleParams, SitemapRoute } from '../type'
 import { getDynamicRoutes } from './dynamic-routes'
 
@@ -8,13 +9,21 @@ export async function generateSitemap(params: SitemapModuleParams) {
   try {
     const dynamicRoutes = (await getDynamicRoutes(params)) || []
     const staticRoutes: SitemapRoute[] = readJsonFile(params.staticSitemapPath)
-    await simpleSitemapAndIndex({
+    const stream = new SitemapAndIndexStream({
       limit: params.chunkSize,
-      hostname: params.hostname,
-      destinationDir: params.sitemapPath,
-      gzip: false,
-      sourceData: Readable.from([...dynamicRoutes, ...staticRoutes]),
+      getSitemapStream: (i) => {
+        const sitemapStream = new SitemapStream({ hostname: params.hostname })
+        const path = `./sitemap-${i}.xml${params.trailingSlash ? '/' : ''}`
+        const ws = sitemapStream
+          .pipe(createWriteStream(resolve(params.sitemapPath, path)))
+        return [{
+          url: new URL(path, params.hostname).toString(),
+          lastmod: new Date().toISOString(),
+        }, sitemapStream, ws]
+      },
     })
+
+    Readable.from([...dynamicRoutes, ...staticRoutes]).pipe(stream).pipe(createWriteStream(resolve(params.sitemapPath, './sitemap-index.xml')))
   }
   catch (e) {
     params.onError(e)

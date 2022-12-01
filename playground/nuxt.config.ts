@@ -13,15 +13,16 @@ const config: NuxtConfig = {
   ],
 
   sitemap: {
-    hostname: 'https://05.ru/',
+    hostname: 'http://localhost:3000/',
+    trailingSlash: true,
     request() {
       return Promise.resolve([
         {
-          url: 'https://05.ru/custom-1',
+          url: 'http://localhost:2000/custom-1',
           changefreq: 'daily',
         },
         {
-          url: 'https://05.ru/custom-2',
+          url: 'http://localhost:2000/custom-2',
           changefreq: 'hourly',
         },
       ])

@@ -23,6 +23,10 @@ export interface SitemapModuleParams {
   defaults: SitemapRouteDefaults
   sitemapPath: string
   staticSitemapPath: string
+  /**
+   * Trailing slash for links in the index file
+   */
+  trailingSlash: boolean
   request: SitemapRequest
   onError: (e: unknown) => void
   beforeGenerate: () => void

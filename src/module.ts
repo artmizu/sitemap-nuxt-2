@@ -25,6 +25,7 @@ const SitemapModule: Module = function (moduleOptions: Partial<SitemapModulePara
       cacheTime: 1000 * 60 * 60 * 24,
       chunkSize: 50000,
       exclude: ['/**/(*', '/**/*script'],
+      trailingSlash: false,
       defaults: {
         changefreq: 'monthly',
         priority: 0.1,
