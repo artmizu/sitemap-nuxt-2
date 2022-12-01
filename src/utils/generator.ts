@@ -9,7 +9,7 @@ export async function generateSitemap(params: SitemapModuleParams) {
   try {
     const dynamicRoutes = (await getDynamicRoutes(params)) || []
     const staticRoutes: SitemapRoute[] = readJsonFile(params.staticSitemapPath)
-    const stream = new SitemapAndIndexStream({
+    const sitemap = new SitemapAndIndexStream({
       limit: params.chunkSize,
       getSitemapStream: (i) => {
         const sitemapStream = new SitemapStream({ hostname: params.hostname })
@@ -23,7 +23,18 @@ export async function generateSitemap(params: SitemapModuleParams) {
       },
     })
 
-    Readable.from([...dynamicRoutes, ...staticRoutes]).pipe(stream).pipe(createWriteStream(resolve(params.sitemapPath, './sitemap-index.xml')))
+    const stream = Readable.from([...dynamicRoutes, ...staticRoutes]).pipe(sitemap).pipe(createWriteStream(resolve(params.sitemapPath, './sitemap-index.xml')))
+    await new Promise((resolve, reject) => {
+      stream.on('finish', () => {
+        sitemap.end()
+        stream.end()
+        resolve('success')
+      })
+
+      stream.on('error', (err) => {
+        reject(err)
+      })
+    })
   }
   catch (e) {
     params.onError(e)
@@ -31,7 +42,7 @@ export async function generateSitemap(params: SitemapModuleParams) {
 }
 
 function readJsonFile(path: string) {
-  const file = fs.readFileSync(path, {
+  const file = fs.readFileSync(path, { // TODO replace with stream
     encoding: 'utf8',
   })
   return JSON.parse(file)
