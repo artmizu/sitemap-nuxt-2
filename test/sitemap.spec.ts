@@ -12,6 +12,7 @@ describe('sitemap check', () => {
     config: {
       sitemap: {
         hostname: 'https://artmizu.ru',
+        trailingSlash: false,
         chunkSize: 10,
         defaults: {
           priority: 0.2,
