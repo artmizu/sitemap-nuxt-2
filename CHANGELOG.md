@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/artmizu/sitemap-nuxt-2/compare/v1.0.3...v1.1.0) (2022-12-01)
+
+
+### Features
+
+* optional trailing slash for files and lastmod ([5dc6674](https://github.com/artmizu/sitemap-nuxt-2/commit/5dc66743100b8b329ab2cd87d5c446acabd84802))
+
 ## [1.0.3](https://github.com/artmizu/sitemap-nuxt-2/compare/v1.0.2...v1.0.3) (2022-11-24)
 
 
